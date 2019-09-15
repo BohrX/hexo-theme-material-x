@@ -221,17 +221,11 @@
 <%- js(['js/kity.min.js']) %>
 <%- js(['js/kityminder.core.min.js']) %>
 <script>
-  $(function() {
-    $('.mindmap p').each(function(index, element) {
-        element.style.display = 'none';
-    }); 
-    var minder = new kityminder.Minder({
-        renderTo: '.mindmap'
-    });
-    var markdownText = $('.mindmap').text().trim();
-    minder.importData('markdown', markdownText);
-    minder.disable();
-    minder.execCommand('hand');
+  [].forEach.call(document.querySelectorAll(".mindmap"), function(dom){
+    var km = new kityminder.Minder();
+    km.setup(dom);
+    km.disable();
+    km.execCommand('hand');
   });
 </script>
 

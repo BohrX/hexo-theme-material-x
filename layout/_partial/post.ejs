@@ -2,7 +2,19 @@
   <%- partial('meta',{post:post, position:'header'}) %>
   <section class="article typo">
     <div class="article-entry" itemprop="articleBody">
-      <%- post.excerpt || post.description || post.content %>
+      <% if(post.layout == 'contents' && post.format == 'mindmap'){ %>
+        <pre class="mindmap" minder-data-type="markdown">
+            <% if(null != post.excerpt){ %>
+<%= strip_html(post.excerpt) %>
+            <% } else if(null != post.description) { %>
+<%= strip_html(post.description) %>
+            <% } else if(null != post.content) { %>
+<%= strip_html(post.content) %>
+            <% } %>
+        </pre>
+      <% } else { %>
+        <%- post.excerpt || post.description || post.content %>
+      <% } %>
       <% if (post.readmore != false && (post.excerpt || post.description)) { %>
         <div class="readmore">
           <a href="<%- url_for(post.path) %>" class="flat-box">
