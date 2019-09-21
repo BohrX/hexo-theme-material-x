@@ -4,12 +4,12 @@
     <div class="article-entry" itemprop="articleBody">
       <% if(post.layout == 'contents' && post.format == 'mindmap'){ %>
         <pre class="mindmap" minder-data-type="markdown">
-            <% if(null != post.excerpt){ %>
-<%= strip_html(post.excerpt) %>
-            <% } else if(null != post.description) { %>
+            <% if(null != post.description){ %>
 <%= strip_html(post.description) %>
+            <% } else if(null != post.excerpt) { %>
+<%= getPostContent(post.raw, 'excerpt') %>
             <% } else if(null != post.content) { %>
-<%= strip_html(post.content) %>
+<%= getPostContent(post.raw) %>
             <% } %>
         </pre>
       <% } else { %>
@@ -33,3 +33,19 @@
     <% } %>
   </section>
 </article>
+
+<%
+  function getPostContent(text, contentType) {
+    var headerExp = new RegExp(/^---(.|[\r\n])*---[\r\n]/g);
+    var more = "(&lt;!-- more --&gt;|<!-- more -->)";
+    var result = text.replace(headerExp, "");
+    if("excerpt" == contentType){
+      var moreCut = new RegExp(more + "(.|[\\r\\n])*$");
+      result = result.replace(moreCut, "");
+    }else {
+      var moreDel = new RegExp(more + "[\\r\\n]?");
+      result = result.replace(moreDel, "");
+    }
+    return result;
+  }
+%>
